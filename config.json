@@ -1,0 +1,29 @@
+{
+  "platform": "pushbullet",
+  "pushed": {
+    "app_key":"your app key",
+    "app_secret":"your app secret"
+  },
+  "catapush": {
+    "token":"your app key"
+  },
+  "pushbullet": {
+    "token": "your app key",
+    "device": "your device key",
+    "channel": "channel name",
+    "push": "channel"
+  },
+  "dmv": {
+    "name":"YOUR NAME",
+    "phone":"000-000-0000",
+    "id": "Y0000000",
+    "dob": "12/31/1900",
+    "office": "632", // for Santa Clara Office
+    "date": [
+      "01/02/18", "01/03/18", "01/04/18"
+    ],
+    "time": [
+      "09:00", "11:00", "13:00", "14:20"
+    ]
+  }
+}
