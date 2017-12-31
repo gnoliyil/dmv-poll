@@ -34,7 +34,7 @@ class DMVPoll:
     def __init__(self):
         self.push = PushMessage()
         self.config = json.load(open(self.CONFIG_FILE, "r"))
-        self.browser = Firefox()
+        self.browser = PhantomJS()
         self.session = requests.Session()
         self.cookies = self.session.cookies
         self.session.headers.update({'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; '
@@ -51,15 +51,18 @@ class DMVPoll:
         self.browser.delete_all_cookies()
         self.browser.get(self.DMV_HOMEPAGE)
         timeout = time.time() + self.TIMEOUT
+        print self.browser.get_cookies()
         while len(self.browser.get_cookies()) < 2:
             if time.time() > timeout:
                 raise exceptions.RuntimeError("Timeout when get cookies from the browser")
 
+        print self.browser.get_cookies()
         cookies_dict = self.browser.get_cookies()
         for cookie in cookies_dict:
             self.cookies.set(cookie["name"], cookie["value"],
                              path=cookie["path"], domain=cookie["domain"],
-                             expires=cookie["expiry"], secure=cookie["secure"])
+                             secure=cookie["secure"])
+                             # expires=cookie["expiry"], secure=cookie["secure"])
 
     def get_homepage(self):
         print self.cookies.items()
@@ -178,12 +181,12 @@ if __name__ == "__main__":
                     dt = parser.parse(datetime_str)
                     r = dmv.query_and_send(dt)
                     logger.info('Query time [%s], Result: %s', dt, r)
-                    if r['result'] == 'error' and r['earliest'] - dt > datetime.timedelta(hours=2):
+                    if 'earliest' in r and r['result'] == 'error' and r['earliest'] - dt > datetime.timedelta(hours=2):
                         break
         except Exception as e:
             traceback.print_exc()
             logger.error(e.message)
-        Timer(10, get_availble_times, ()).start()
+        Timer(4, get_availble_times, ()).start()
 
     def save_sent_log():
         try:
